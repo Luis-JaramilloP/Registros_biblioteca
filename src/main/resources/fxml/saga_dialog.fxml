@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.biblioteca.ui.SagaDialogController"
+      spacing="14.0" prefWidth="500.0" styleClass="dialog-pane">
+
+    <padding>
+        <Insets top="20.0" right="24.0" bottom="20.0" left="24.0" />
+    </padding>
+
+    <Label text="Información de la Saga o Serie" styleClass="dialog-title" />
+
+    <GridPane hgap="12.0" vgap="12.0">
+        <columnConstraints>
+            <ColumnConstraints minWidth="120.0" prefWidth="130.0" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+
+        <!-- Nombre -->
+        <Label text="Nombre de Saga (*):" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <TextField fx:id="txtNombre" promptText="Ej: El Señor de los Anillos, Harry Potter..."
+                   GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <!-- Autor -->
+        <Label text="Autor Principal (*):" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="txtAutor" promptText="Autor o creador de la serie"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <!-- Total Volúmenes -->
+        <Label text="Total Volúmenes (*):" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <Spinner fx:id="spnTotalVolumenes" prefWidth="120.0" editable="true"
+                 GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+        <!-- Descripción -->
+        <Label text="Sinopsis / Notas:" GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="TOP_LEFT" />
+        <TextArea fx:id="txtDescripcion" promptText="Resumen temático del universo o serie..."
+                  prefRowCount="4" wrapText="true" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+    </GridPane>
+
+    <HBox spacing="12.0" alignment="CENTER_RIGHT">
+        <padding>
+            <Insets top="10.0" />
+        </padding>
+        <Button fx:id="btnCancelar" text="Cancelar" onAction="#handleCancelar" styleClass="btn-secondary" />
+        <Button fx:id="btnGuardar" text="Guardar Saga" onAction="#handleGuardar" styleClass="btn-primary" />
+    </HBox>
+</VBox>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.biblioteca.ui.MainController"
+            prefWidth="1100.0" prefHeight="720.0"
+            styleClass="root-pane">
+
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <left>
+        <VBox styleClass="sidebar" prefWidth="250.0" spacing="12.0">
+            <padding>
+                <Insets top="24.0" right="16.0" bottom="24.0" left="16.0" />
+            </padding>
+
+            <VBox styleClass="brand-container" spacing="4.0">
+                <Label text="📚 Biblioteca Personal" styleClass="brand-title" />
+                <Label text="Gestor de Libros y Sagas" styleClass="brand-subtitle" />
+            </VBox>
+
+            <Separator styleClass="sidebar-divider" />
+
+            <VBox spacing="8.0">
+                <Button fx:id="btnNavLibros" text="📖  Catálogo de Libros" maxWidth="Infinity"
+                        styleClass="nav-button, active-nav" onAction="#mostrarPanelLibros" />
+                <Button fx:id="btnNavSagas" text="📚  Sagas Literarias" maxWidth="Infinity"
+                        styleClass="nav-button" onAction="#mostrarPanelSagas" />
+                <Button fx:id="btnNavEstadisticas" text="📊  Estadísticas y Métricas" maxWidth="Infinity"
+                        styleClass="nav-button" onAction="#mostrarPanelEstadisticas" />
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <VBox styleClass="sidebar-info-box" spacing="4.0">
+                <Label text="Sistema de Persistencia" styleClass="info-box-title" />
+                <Label text="Archivos locales serializados" styleClass="info-box-text" />
+                <Label text="Sin base de datos" styleClass="info-box-subtext" />
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- ÁREA DE CONTENIDO CENTRAL -->
+    <center>
+        <StackPane styleClass="content-area">
+
+            <!-- PANEL 1: LIBROS -->
+            <VBox fx:id="panelLibros" spacing="16.0">
+                <padding>
+                    <Insets top="20.0" right="24.0" bottom="20.0" left="24.0" />
+                </padding>
+
+                <!-- Encabezado de sección -->
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2.0">
+                        <Label text="Catálogo de Libros" styleClass="section-title" />
+                        <Label text="Gestiona y filtra tus libros físicos y digitales" styleClass="section-subtitle" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="lblConteoLibros" text="Cargando..." styleClass="badge-counter" />
+                </HBox>
+
+                <!-- Barra de Búsqueda y Filtros con Streams -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="filter-bar">
+                    <TextField fx:id="txtBuscarLibro" promptText="🔍 Buscar por título, autor o notas..."
+                               HBox.hgrow="ALWAYS" styleClass="search-field" />
+                    <ComboBox fx:id="cmbFiltroGenero" promptText="Género" prefWidth="170.0" />
+                    <ComboBox fx:id="cmbFiltroEstado" promptText="Estado" prefWidth="150.0" />
+                    <ComboBox fx:id="cmbFiltroSaga" promptText="Saga" prefWidth="180.0" />
+                    <Button text="Limpiar" onAction="#handleLimpiarFiltros" styleClass="btn-secondary" />
+                </HBox>
+
+                <!-- Botonera CRUD -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <Button text="+ Nuevo Libro" onAction="#handleNuevoLibro" styleClass="btn-primary" />
+                    <Button text="✏️ Editar" onAction="#handleEditarLibro" styleClass="btn-action" />
+                    <Button text="🗑️ Eliminar" onAction="#handleEliminarLibro" styleClass="btn-danger" />
+                </HBox>
+
+                <!-- Tabla de Libros -->
+                <TableView fx:id="tblLibros" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="colTitulo" text="Título" prefWidth="220.0" />
+                        <TableColumn fx:id="colAutor" text="Autor" prefWidth="160.0" />
+                        <TableColumn fx:id="colAnio" text="Año" prefWidth="70.0" />
+                        <TableColumn fx:id="colGenero" text="Género" prefWidth="130.0" />
+                        <TableColumn fx:id="colSaga" text="Saga / Serie" prefWidth="180.0" />
+                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="110.0" />
+                        <TableColumn fx:id="colCalificacion" text="Calificación" prefWidth="140.0" />
+                        <TableColumn fx:id="colPaginas" text="Págs." prefWidth="75.0" />
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- PANEL 2: SAGAS -->
+            <VBox fx:id="panelSagas" spacing="16.0" visible="false" managed="false">
+                <padding>
+                    <Insets top="20.0" right="24.0" bottom="20.0" left="24.0" />
+                </padding>
+
+                <!-- Encabezado de sección -->
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2.0">
+                        <Label text="Sagas y Series Literarias" styleClass="section-title" />
+                        <Label text="Organiza colecciones y sigue tu avance de lectura" styleClass="section-subtitle" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="lblConteoSagas" text="Cargando..." styleClass="badge-counter" />
+                </HBox>
+
+                <!-- Barra de búsqueda y CRUD Sagas -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="filter-bar">
+                    <TextField fx:id="txtBuscarSaga" promptText="🔍 Buscar sagas por nombre o autor..."
+                               HBox.hgrow="ALWAYS" styleClass="search-field" />
+                    <Button text="+ Nueva Saga" onAction="#handleNuevaSaga" styleClass="btn-primary" />
+                    <Button text="✏️ Editar" onAction="#handleEditarSaga" styleClass="btn-action" />
+                    <Button text="🗑️ Eliminar" onAction="#handleEliminarSaga" styleClass="btn-danger" />
+                    <Button text="👁️ Ver Libros de Saga" onAction="#handleVerLibrosDeSaga" styleClass="btn-info" />
+                </HBox>
+
+                <!-- Tabla de Sagas -->
+                <TableView fx:id="tblSagas" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="colSagaNombre" text="Nombre de la Saga" prefWidth="250.0" />
+                        <TableColumn fx:id="colSagaAutor" text="Autor Principal" prefWidth="180.0" />
+                        <TableColumn fx:id="colSagaTotalVol" text="Total Volúmenes" prefWidth="130.0" />
+                        <TableColumn fx:id="colSagaProgreso" text="Progreso de Lectura" prefWidth="180.0" />
+                        <TableColumn fx:id="colSagaDescripcion" text="Descripción / Sinopsis" prefWidth="300.0" />
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- PANEL 3: ESTADÍSTICAS -->
+            <VBox fx:id="panelEstadisticas" spacing="20.0" visible="false" managed="false">
+                <padding>
+                    <Insets top="20.0" right="24.0" bottom="20.0" left="24.0" />
+                </padding>
+
+                <!-- Encabezado de sección -->
+                <VBox spacing="2.0">
+                    <Label text="Panel de Estadísticas y Métricas" styleClass="section-title" />
+                    <Label text="Análisis dinámico procesado mediante Java Streams" styleClass="section-subtitle" />
+                </VBox>
+
+                <!-- Tarjetas de Métricas Generales -->
+                <HBox spacing="16.0">
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label text="Total de Libros" styleClass="stat-card-title" />
+                        <Label fx:id="lblStatTotalLibros" text="0" styleClass="stat-card-value" />
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label text="Total de Sagas" styleClass="stat-card-title" />
+                        <Label fx:id="lblStatTotalSagas" text="0" styleClass="stat-card-value" />
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label text="Páginas Leídas" styleClass="stat-card-title" />
+                        <Label fx:id="lblStatPaginasLeidas" text="0" styleClass="stat-card-value" />
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label text="Calificación Promedio" styleClass="stat-card-title" />
+                        <Label fx:id="lblStatPromedioCalificacion" text="0.0 ★" styleClass="stat-card-value" />
+                    </VBox>
+                </HBox>
+
+                <!-- Desglose por Estado de Lectura -->
+                <VBox styleClass="stat-subcard" spacing="12.0">
+                    <Label text="Desglose por Estado de Lectura" styleClass="stat-section-title" />
+                    <HBox spacing="20.0">
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="status-pill-box, pill-completado">
+                            <Label text="Completados" styleClass="status-pill-label" />
+                            <Label fx:id="lblStatCompletados" text="0" styleClass="status-pill-value" />
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="status-pill-box, pill-leyendo">
+                            <Label text="Leyendo Actualmente" styleClass="status-pill-label" />
+                            <Label fx:id="lblStatLeyendo" text="0" styleClass="status-pill-value" />
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="status-pill-box, pill-pendiente">
+                            <Label text="Pendientes" styleClass="status-pill-label" />
+                            <Label fx:id="lblStatPendientes" text="0" styleClass="status-pill-value" />
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="status-pill-box, pill-abandonado">
+                            <Label text="Abandonados" styleClass="status-pill-label" />
+                            <Label fx:id="lblStatAbandonados" text="0" styleClass="status-pill-value" />
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Libros Mejor Calificados -->
+                <VBox spacing="8.0" VBox.vgrow="ALWAYS">
+                    <Label text="Top Libros Mejor Calificados (Filtro con Streams)" styleClass="stat-section-title" />
+                    <TableView fx:id="tblTopLibros" prefHeight="160.0" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="colTopTitulo" text="Título" prefWidth="350.0" />
+                            <TableColumn fx:id="colTopAutor" text="Autor" prefWidth="250.0" />
+                            <TableColumn fx:id="colTopCalificacion" text="Calificación" prefWidth="180.0" />
+                        </columns>
+                    </TableView>
+                </VBox>
+
+            </VBox>
+
+        </StackPane>
+    </center>
+</BorderPane>

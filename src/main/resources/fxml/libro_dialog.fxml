@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.biblioteca.ui.LibroDialogController"
+      spacing="14.0" prefWidth="540.0" styleClass="dialog-pane">
+
+    <padding>
+        <Insets top="20.0" right="24.0" bottom="20.0" left="24.0" />
+    </padding>
+
+    <Label text="Información del Libro" styleClass="dialog-title" />
+
+    <GridPane hgap="12.0" vgap="12.0">
+        <columnConstraints>
+            <ColumnConstraints minWidth="120.0" prefWidth="130.0" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+
+        <!-- Título -->
+        <Label text="Título (*):" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <TextField fx:id="txtTitulo" promptText="Nombre de la obra literaria"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <!-- Autor -->
+        <Label text="Autor (*):" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="txtAutor" promptText="Nombre completo del autor"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <!-- Año y Páginas -->
+        <Label text="Año de Publicación:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <HBox spacing="10.0" alignment="CENTER_LEFT" GridPane.rowIndex="2" GridPane.columnIndex="1">
+            <Spinner fx:id="spnAnio" prefWidth="120.0" editable="true" />
+            <Label text="Páginas:" />
+            <Spinner fx:id="spnPaginas" prefWidth="120.0" editable="true" />
+        </HBox>
+
+        <!-- Género -->
+        <Label text="Género:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <ComboBox fx:id="cmbGenero" maxWidth="Infinity" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+        <!-- Saga -->
+        <Label text="Pertenece a Saga:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+        <HBox spacing="8.0" alignment="CENTER_LEFT" GridPane.rowIndex="4" GridPane.columnIndex="1">
+            <ComboBox fx:id="cmbSaga" promptText="Seleccionar saga (opcional)" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            <Button text="Quitar" onAction="#handleLimpiarSaga" styleClass="btn-secondary" />
+        </HBox>
+
+        <!-- Número en Saga -->
+        <Label text="Volumen en Saga:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+        <Spinner fx:id="spnNumeroEnSaga" prefWidth="120.0" editable="true" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+
+        <!-- Estado de Lectura -->
+        <Label text="Estado de Lectura:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+        <ComboBox fx:id="cmbEstado" maxWidth="Infinity" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+
+        <!-- Calificación -->
+        <Label text="Calificación (0 - 5 ★):" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+        <Spinner fx:id="spnCalificacion" prefWidth="120.0" editable="true" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+
+        <!-- Notas -->
+        <Label text="Notas / Reseña:" GridPane.rowIndex="8" GridPane.columnIndex="0" alignment="TOP_LEFT" />
+        <TextArea fx:id="txtNotas" promptText="Comentarios, pensamientos o resumen breve..."
+                  prefRowCount="3" wrapText="true" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+    </GridPane>
+
+    <HBox spacing="12.0" alignment="CENTER_RIGHT">
+        <padding>
+            <Insets top="10.0" />
+        </padding>
+        <Button fx:id="btnCancelar" text="Cancelar" onAction="#handleCancelar" styleClass="btn-secondary" />
+        <Button fx:id="btnGuardar" text="Guardar Libro" onAction="#handleGuardar" styleClass="btn-primary" />
+    </HBox>
+</VBox>

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Biblioteca Personal y Sagas
+Comment=Gestor de biblioteca personal y sagas literarias con persistencia en archivos
+Exec=AppRun
+Icon=biblioteca
+Terminal=false
+Categories=Office;Database;Utility;Java;
+StartupWMClass=com.biblioteca.MainApp

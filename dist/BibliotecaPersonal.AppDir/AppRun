@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export LD_LIBRARY_PATH="$HERE/usr/lib/openjfx:$LD_LIBRARY_PATH"
+
+# Soporte Fedora Wayland / X11 para GTK3 Glass
+if [ -z "$GDK_BACKEND" ]; then
+    export GDK_BACKEND=x11
+fi
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+LOG_FILE="/tmp/biblioteca_app.log"
+echo "=== Sesión iniciada: $(date) ===" > "$LOG_FILE"
+echo "WAYLAND_DISPLAY: $WAYLAND_DISPLAY" >> "$LOG_FILE"
+echo "DISPLAY: $DISPLAY" >> "$LOG_FILE"
+echo "GDK_BACKEND: $GDK_BACKEND" >> "$LOG_FILE"
+
+if command -v java >/dev/null 2>&1; then
+    JAVA_CMD="java"
+elif [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+    JAVA_CMD="$JAVA_HOME/bin/java"
+else
+    MSG="No se encontró Java (JRE 17+) en el sistema para ejecutar."
+    echo "$MSG" >> "$LOG_FILE"
+    zenity --error --title="Biblioteca Personal" --text="$MSG" 2>/dev/null || true
+    exit 1
+fi
+
+"$JAVA_CMD" \
+     --enable-native-access=ALL-UNNAMED \
+     --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
+     --add-opens javafx.fxml/javafx.fxml=ALL-UNNAMED \
+     --module-path "$HERE/usr/lib/openjfx" \
+     --add-modules javafx.controls,javafx.fxml \
+     -jar "$HERE/usr/bin/biblioteca.jar" "$@" >> "$LOG_FILE" 2>&1
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+    ERROR_DETAIL=$(tail -n 12 "$LOG_FILE")
+    zenity --error --title="Biblioteca Personal" \
+           --text="Error al ejecutar la aplicación (código $EXIT_CODE).\n\nDetalles:\n$ERROR_DETAIL\n\nArchivo de registro: $LOG_FILE" 2>/dev/null || true
+fi
+exit $EXIT_CODE
